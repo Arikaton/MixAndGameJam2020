@@ -15,7 +15,7 @@ public class Letter : MonoBehaviour, IPointerClickHandler
     private LetterAction _letterAction = LetterAction.Add;
     private TextMeshProUGUI text;
     private UIShiny _shineEffect;
-    protected string _letter;
+    private string _letter;
 
     public void Init(string letter, LetterAction letterAction = LetterAction.Add)
     {
@@ -32,10 +32,5 @@ public class Letter : MonoBehaviour, IPointerClickHandler
             InputManager.Instance.AddLetter(_letter);
         else
             InputManager.Instance.RemoveLetter(this);
-    }
-
-    public void PlayEffect()
-    {
-        _shineEffect.Play();
     }
 }

@@ -23,25 +23,15 @@ public class WordsManager : MonoBehaviour
     public void EnterWorld()
     {
         var word = InputManager.Instance.InputWord;
-        if (CheckWorld(word))
-        {
-            FreeWorlds.Remove(word);
-            BusyWorlds.Add(word);
-            var newWord = Instantiate(_word, _busyWordsContainer);
-            newWord.Init(word);
-            newWord.PlayEffect();
-            InputManager.Instance.Clear();
-        }
-    }
-
-    IEnumerator PlayEffectsForLetter()
-    {
-        yield return new WaitForSeconds(1);
-        foreach (var letter in _letters)
-        {
-            letter.PlayEffect();
-            yield return new WaitForSeconds(letter.EffectDuration - 0.2f);
-        }
+        if (!CheckWorld(word)) return;
+        
+        FreeWorlds.Remove(word);
+        BusyWorlds.Add(word);
+        var newWord = Instantiate(_word, _busyWordsContainer);
+        newWord.Init(word);
+        InputManager.Instance.Clear();
+        Card.Instance.SetImage(word);
+        Card.Instance.ShowHideCard();
     }
 
     public void Init(string world, string[] freeWorlds)
@@ -55,7 +45,5 @@ public class WordsManager : MonoBehaviour
         }
         CurrentWorld = world;
         FreeWorlds = freeWorlds.ToList();
-        
-        StartCoroutine(PlayEffectsForLetter());
     }
 }

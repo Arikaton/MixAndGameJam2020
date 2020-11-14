@@ -47,7 +47,6 @@ public class InputManager : MonoBehaviour
         var currentLetter = _letters[_inputWord.Length - 1];
         currentLetter.gameObject.SetActive(true);
         currentLetter.Init(letter, Letter.LetterAction.Remove);
-        currentLetter.PlayEffect();
     }
 
     public void RemoveLetter(Letter letterObj)

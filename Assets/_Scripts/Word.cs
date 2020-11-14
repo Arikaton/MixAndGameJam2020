@@ -17,9 +17,4 @@ public class Word : MonoBehaviour
         text.text = word.ToUpper();
         _dissolve = GetComponent<UIDissolve>();
     }
-
-    public void PlayEffect()
-    {
-        _dissolve.Play();
-    }
 }
