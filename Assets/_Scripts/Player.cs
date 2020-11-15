@@ -5,41 +5,25 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float health;
-    private bool _isRealPlayer = true;
+    [SerializeField] private bool _isRealPlayer = true;
 
-    private void Start()
+    public void GetWord()
     {
-        health = GameData.Instance.maxHealth;
-        UIManager.Instance.SetHealth(health, _isRealPlayer);
+        var word = InputManager.Instance.InputWord;
+        WordsManager.Instance.EnterWorld(word);
     }
 
-    public void GetDamage(float damage)
+    public void GetWord(string word)
     {
-        PlayDamageVFX();
-        health -= damage;
-        UIManager.Instance.SetHealth(health);
-        if (health <= 0)
+        WordsManager.Instance.EnterWorld(word, false);
+    }
+
+    private void Update()
+    {
+        if (!_isRealPlayer) return;
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space))
         {
-            GameManager.Instance.LoseGame();
-            PlayDeathAnim();
+            GetWord();
         }
-    }
-
-    public void GetHealth(float h)
-    {
-        health += h;
-        if (health > GameData.Instance.maxHealth)
-            health = GameData.Instance.maxHealth;
-    }
-
-    public void PlayDamageVFX()
-    {
-        
-    }
-
-    public void PlayDeathAnim()
-    {
-        
     }
 }

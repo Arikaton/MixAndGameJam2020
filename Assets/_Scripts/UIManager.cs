@@ -8,21 +8,23 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
-    [SerializeField] private Slider playerHealthSlider;
-    [SerializeField] private Slider enemyHealthSlider;
+    [SerializeField] private GameObject loseWindow;
+    [SerializeField] private GameObject winWindow;
 
-    private float maxPlayerHealth;
-
-    public void Start()
+    private void Awake()
     {
-        maxPlayerHealth = GameData.Instance.maxHealth;
-        playerHealthSlider.maxValue = maxPlayerHealth;
-        enemyHealthSlider.maxValue = maxPlayerHealth;
+        Instance = this;
     }
 
-    public void SetHealth(float health, bool player = true)
+    public void ShowLosePopup()
     {
-        var healthSlider = player ? playerHealthSlider : enemyHealthSlider;
-        healthSlider.value = health;
+        loseWindow.SetActive(true);
     }
+
+    public void ShowWinPopup()
+    {
+        winWindow.SetActive(true);
+    }
+
+    
 }

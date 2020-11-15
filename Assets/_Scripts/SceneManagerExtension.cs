@@ -39,6 +39,11 @@ public class SceneManagerExtension : MonoBehaviour
         LoadSceneWithFadeEffect(GameScene);
     }
 
+    public void LoadStartScene()
+    {
+        LoadSceneWithFadeEffect(MenuScene);
+    }
+
     public void LoadSceneWithFadeEffect(string sceneName)
     {
         if (_isLoadingScene) return;

@@ -4,54 +4,63 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GameManager : SerializedMonoBehaviour
+public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public static int level;
     
     [SerializeField] private WordsManager _wordsManager;
+    [SerializeField] private Bot _bot;
 
-    [ShowInInspector]
-    public Dictionary<string, string[]> words = new Dictionary<string, string[]>();
+    private bool _gameEnded = false;
+
+    public Dictionary<string, string[]> words;
 
     private void Awake()
     {
         Instance = this;
     }
 
-    [Button]
-    public void Save()
+    private void LoadWords()
     {
-        string serialized = JsonConvert.SerializeObject(words);
-        File.WriteAllText(Application.streamingAssetsPath + "/worlds.txt", serialized);
-    }
-
-    [Button]
-    public void Load()
-    {
-        string text = File.ReadAllText(Application.streamingAssetsPath + "/worlds.txt");
-        words = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(text);
+        var text = Resources.Load("worlds") as TextAsset;
+        words = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(text.text);
     }
 
     private void Start()
     {
-        if (words.Count == 0)
-            Load();
-        string currentWorld = words.Keys.ToList()[Random.Range(0, words.Count)];
+        LoadWords();
+        SoundManager.Instance.PlayStartRoundSound();
+        string currentWorld = words.Keys.ToList()[level];
+        if (level == 0)
+            level = 1;
+        else
+            level = 0;
         _wordsManager.Init(currentWorld, words[currentWorld]);
         InputManager.Instance.Init(currentWorld);
     }
 
-    public void LoseGame()
+    public void EndGame(bool isPlayer)
     {
-        
+        if (!_gameEnded)
+        {
+            _gameEnded = true;
+            if (_bot != null)
+                _bot.StopAllCoroutines();
+            if (!isPlayer)
+            {
+                UIManager.Instance.ShowLosePopup();
+                SoundManager.Instance.PlayLoseSound();
+            }
+            else
+            {
+                UIManager.Instance.ShowWinPopup();
+                SoundManager.Instance.PlayWindSound();
+            }
+        }
     }
-
-    public void WinGame()
-    {
-        
-    }
+    
 }
